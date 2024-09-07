@@ -1,0 +1,104 @@
+//s table
+ATE TABLE `mca2024`.`s` (`sno` CHAR(3) NOT NULL , `sname` VARCHAR(50) NOT NULL ,
+ `s_status` INT NOT NULL , `s_city` VARCHAR(25) NOT NULL ,
+ PRIMARY KEY (`sno`)) ENGINE = InnoDB;
+ 
+ 
+ // p table
+ 
+CREATE TABLE `mca2024`.`p` (`pno` CHAR(3) NOT NULL , `pname` VARCHAR(20) 
+NOT NULL , `color` VARCHAR(10) NOT NULL , `weight` FLOAT(5.2) NOT NULL , `p_city` VARCHAR(25) NOT NULL ,
+ PRIMARY KEY (`pno`)) ENGINE = InnoDB;
+ 
+ 
+ //sp table 
+ CREATE TABLE `mca2024`.`sp` (`sno` CHAR(3) NOT NULL ,
+ `pno` CHAR(3) NOT NULL , 
+ `qtr` INT NOT NULL ) ENGINE = InnoDB;
+ 
+ 
+ //create table to sp
+ CREATE TABLE sp(sno char(3),
+                pno char(30),
+                qtr int,
+                FOREIGN KEY(sno) REFERENCES s(sno),
+                FOREIGN key(pno) REFERENCES p(pno),
+                PRIMARY key(sno,pno));
+				
+				
+//create to student table to drop
+CREATE TABLE `mca2024`.`stu` (`stuno` CHAR(3) NOT NULL , `stuname`
+ VARCHAR(20) NOT NULL , `stu_city` VARCHAR(25) 
+NOT NULL , PRIMARY KEY (`stuno`)) ENGINE = InnoDB; 				
+				
+#create 				
+			
+
+
+
+###2 program 2 
+1. show all parts located at londan city.
+SELECT * from p WHERE p_city="londan";
+SELECT * FROM p WHERE p_city="london"; 
+
+2.show maximum weight` part name.
+SELECT max(weight) pname from p; 
+
+3.show all parts name,part number for part color=red.
+SELECT pname,pno FROM p WHERE color="red"; 
+
+4.
+SELECT DISTINCT s.sname,s.s_city 
+FROM s JOIN sp ON s.sno=sp.sno WHERE sp.qtr>200; 
+
+5.
+SELECT * FROM p WHERE weight 
+!=(SELECT weight FROM p
+ ORDER BY weight DESC LIMIT 1)
+ ORDER BY weight DESC LIMIT 1; 
+ 
+#####6. run to 
+SELECT s.sno,p.weight,s.sname,sp.qtr 
+FROM s,p,sp WHERE p.pno=sp.pno 
+ORDER BY p.weight DESC LIMIT 1; 
+
+6 to vurnda
+SELECT sp.sno,sp.qtr FROM sp,p WHERE p.pno=sp.pno 
+AND p.weight=(SELECT p.weight FROM p 
+ORDER BY weight DESC LIMIT 1); 
+
+6
+
+select sno,qtr from sp JOIN p on 
+sp.pno=p.pno where p.weight=
+(SELECT MAX(p.weight) from p); 
+
+7 
+SELECT s.sname,sp.qtr FROM s,sp,p
+WHERE sp.pno=p.pno and sp.sno=s.sno
+and p.color="red"; 
+
+8 
+SELECT s.sname,p.p_city,sp.qtr FROM s,p,sp 
+WHERE s.sno=sp.sno and
+p.pno=sp.pno and s.s_status<30; 
+
+9.
+SELECT s.sname,SUM(sp.qtr) AS qtr FROM s,sp 
+WHERE s.sno=sp.sno GROUP BY sp.sno; 
+			
+10
+SELECT p.pname,SUM(sp.qtr) AS qtr FROM p,sp 
+WHERE p.pno=sp.pno GROUP by sp.pno; 
+
+11.
+SELECT p.pname, SUM(sp.qtr) AS total_qty FROM 
+p JOIN sp ON p.pno = sp.pno group by pname; 
+
+12.
+SELECT s.sno,s.sname,SUM(sp.qtr) AS TotalQty FROM sp,s 
+WHERE s.sno=sp.sno AND s.sno<'s4' GROUP BY sno; 
+
+13.
+SELECT s.sname,sum(sp.qtr)AS Total_qtr FROM s,sp 
+WHERE s.sno=sp.sno AND s.s_status=20 GROUP by sp.sno; 
